@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Movie } from "../interfaces";
+import { Movie } from "../types/interfaces";
 
 interface MovieCardProps {
   movie: Movie;

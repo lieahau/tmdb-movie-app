@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
 import { tmdb } from "../api/tmdb";
 import MovieGrid from "../components/MovieGrid";
-import { Movie } from "../interfaces";
+import { Movie } from "../types/interfaces";
+import { getMoviesByCategory, getSearchMovies } from "../api/apiService";
+import { MovieCategory } from "../types/enum";
 
 const categories = [
-  { label: "Now Playing", value: "now_playing" },
-  { label: "Popular", value: "popular" },
-  { label: "Top Rated", value: "top_rated" },
-  { label: "Upcoming", value: "upcoming" },
+  { label: "Now Playing", value: MovieCategory.NowPlaying },
+  { label: "Popular", value: MovieCategory.Popular },
+  { label: "Top Rated", value: MovieCategory.TopRated },
+  { label: "Upcoming", value: MovieCategory.Upcoming },
 ];
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("now_playing");
+  const [category, setCategory] = useState<MovieCategory>(MovieCategory.NowPlaying);
   const [page, setPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,20 +25,12 @@ const Home = () => {
       setLoading(true);
       setError(null);
 
-      let url = `/movie/${category}`;
-      let params: any = { page: newPage };
+      let results: Movie[] = [];
+      if (search) results = await getSearchMovies(search, newPage);
+      else results = await getMoviesByCategory(category, newPage);
 
-      if (search) {
-        url = "/search/movie";
-        params.query = search;
-      }
-
-      const res = await tmdb.get(url, { params });
-      if (newPage === 1) {
-        setMovies(res.data.results);
-      } else {
-        setMovies((prev) => [...prev, ...res.data.results]);
-      }
+      if (newPage === 1) setMovies(results);
+      else setMovies((prev) => [...prev, ...results]);
     } catch (err) {
       setError("Failed to fetch movies. Please try again.");
     } finally {

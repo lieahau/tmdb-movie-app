@@ -1,4 +1,4 @@
-import { Movie } from "../interfaces";
+import { Movie } from "../types/interfaces";
 import MovieCard from "./MovieCard";
 
 interface MovieGridProps {

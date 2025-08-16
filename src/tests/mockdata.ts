@@ -1,4 +1,4 @@
-import { Movie } from "../interfaces";
+import { Movie } from "../types/interfaces";
 
 export const mockMovies: Movie[] = [
   { id: 1, title: "Movie A", release_date: "2024-01-01", poster_path: "/imgA.jpg" },

@@ -4,10 +4,9 @@ import { tmdb } from "../api/tmdb";
 import { renderWithRouter } from "./test-utils";
 import { mockMovies } from "./mockdata";
 
-jest.mock("../api/tmdb", () => ({
-  tmdb: {
-    get: jest.fn(),
-  },
+jest.mock("../api/apiService", () => ({
+  getMoviesByCategory: jest.fn(),
+  getSearchMovies: jest.fn(),
 }));
 
 describe("Home page", () => {
