@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Movie } from "../types/interfaces";
+import { getPosterUrl } from "../api/apiService";
 
 interface MovieCardProps {
   movie: Movie;
@@ -8,10 +9,6 @@ interface MovieCardProps {
 
 const MovieCard = ({ movie }: MovieCardProps) => {
   const [imgLoaded, setImgLoaded] = useState(false);
-
-  const posterUrl = movie.poster_path
-    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-    : "/placeholder.jpg";
 
   return (
     <Link to={`/movie/${movie.id}`} className="h-full text-gray-900 dark:text-gray-100 no-underline">
@@ -23,7 +20,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           )}
 
           <img
-            src={posterUrl}
+            src={getPosterUrl(movie.poster_path)}
             alt={movie.title}
             onLoad={() => setImgLoaded(true)}
             className={`object-cover w-full h-full transition-opacity ${
@@ -34,7 +31,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           {/* Dark overlay */}
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-          {/* DETAILS button */}
+          {/* Details button */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
             <span className="px-4 py-1 rounded border border-white text-white transition-all group-hover:border-white hover:bg-white hover:text-gray-800">
               DETAILS

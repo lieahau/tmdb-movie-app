@@ -24,3 +24,9 @@ export const getMovieDetail = async (id: string) => {
   });
   return res.data;
 };
+
+export const getPosterUrl = (posterPath: string | null) => {
+  return posterPath
+    ? `https://image.tmdb.org/t/p/w500${posterPath}`
+    : "/No-Image-Placeholder.png";
+}

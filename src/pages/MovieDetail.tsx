@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getMovieDetail } from "../api/apiService";
+import { getMovieDetail, getPosterUrl } from "../api/apiService";
 import { StatusMessage } from "../components/StatusMessage";
 
 const MovieDetail = () => {
@@ -61,7 +61,7 @@ const MovieDetail = () => {
             <div className="w-full max-w-[350px] md:max-w-[300px] aspect-[2/3] bg-gray-200 animate-pulse rounded" />
           )}
           <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            src={getPosterUrl(movie.poster_path)}
             alt={movie.title}
             className={`w-full max-w-[350px] md:max-w-[300px] rounded ${
               imgLoaded ? "opacity-100" : "opacity-0"
