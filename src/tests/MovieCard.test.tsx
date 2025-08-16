@@ -4,9 +4,12 @@ import MovieCard from "../components/MovieCard";
 import { mockMovies } from "./mockdata";
 
 describe("MovieCard", () => {
-  test("renders movie title, release year, and poster", async () => {
+  beforeEach(async () => {
+    jest.clearAllMocks();
     await renderWithRouter(<MovieCard movie={mockMovies[0]} />);
-    
+  });
+
+  test("renders movie title, release year, and poster", () => {
     expect(screen.getByText("Movie A")).toBeInTheDocument();
     expect(screen.getByText("2024")).toBeInTheDocument();
 
@@ -15,8 +18,7 @@ describe("MovieCard", () => {
     expect(img.alt).toBe("Movie A");
   });
 
-  test("links to the movie detail page", async () => {
-    await renderWithRouter(<MovieCard movie={mockMovies[0]} />);
+  test("links to the movie detail page", () => {
     const link = screen.getByRole("link");
     expect(link.getAttribute("href")).toBe("/movie/1");
   });

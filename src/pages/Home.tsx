@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { tmdb } from "../api/tmdb";
 import MovieGrid from "../components/MovieGrid";
 import { Movie } from "../types/interfaces";
 import { getMoviesByCategory, getSearchMovies } from "../api/apiService";
