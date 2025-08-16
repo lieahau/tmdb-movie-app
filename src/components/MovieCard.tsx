@@ -14,7 +14,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
     : "/placeholder.jpg";
 
   return (
-    <Link to={`/movie/${movie.id}`} className="h-full">
+    <Link to={`/movie/${movie.id}`} className="h-full text-gray-900 dark:text-gray-100 no-underline">
       <div className="bg-white dark:bg-gray-800 shadow p-2 rounded flex flex-col h-full">
         {/* Image */}
         <div className="relative w-full aspect-[2/3] overflow-hidden mb-2 group">
