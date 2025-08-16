@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { tmdb } from "../api/tmdb";
-import { Link } from "react-router-dom";
-
-type Movie = {
-  id: number;
-  title: string;
-  release_date: string;
-  poster_path: string;
-};
+import MovieGrid from "../components/MovieGrid";
+import { Movie } from "../interfaces";
 
 const categories = [
   { label: "Now Playing", value: "now_playing" },
@@ -105,23 +99,7 @@ const Home = () => {
       </div>
 
       {/* Movies */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {movies.map((movie) => (
-          <Link key={movie.id} to={`/movie/${movie.id}`}>
-            <div className="bg-white shadow p-2 rounded">
-              <img
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                alt={movie.title}
-                className="rounded mb-2"
-              />
-              <h2 className="text-lg font-semibold">{movie.title}</h2>
-              <p className="text-sm text-gray-500">
-                {new Date(movie.release_date).getFullYear()}
-              </p>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <MovieGrid movies={movies} />
 
       {error && (
         <div className="mt-4 text-center">
