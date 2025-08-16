@@ -5,6 +5,7 @@ import { getMoviesByCategory, getSearchMovies } from "../api/apiService";
 import { MovieCategory } from "../types/enum";
 import MovieFilters from "../components/MovieFilters";
 import { useInfiniteScroll } from "../hooks/infiniteScroll";
+import { StatusMessage } from "../components/StatusMessage";
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -69,24 +70,13 @@ const Home = () => {
       {/* Movies */}
       <MovieGrid movies={movies} />
 
-      {error && (
-        <div className="mt-4 text-center">
-          <p>{error}</p>
-          <button
-            onClick={() => fetchMovies(page)}
-            className="mt-2 px-3 py-1 bg-gray-800 text-white rounded"
-          >
-            Retry
-          </button>
-        </div>
-      )}
-
-      {!loading && !error && movies.length === 0 && (
-        <p className="mt-4 text-center">No movies found.</p>
-      )}
-
-      {/* Loading indicator */}
-      {loading && <p className="mt-4 text-center">Loading...</p>}
+      {/* Status messages */}
+      <StatusMessage
+        loading={loading}
+        error={error}
+        onRetry={() => fetchMovies(page)}
+        noData={!loading && !error && movies.length === 0}
+      />
     </div>
   );
 };
