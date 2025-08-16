@@ -4,7 +4,7 @@ import { Movie } from "../types/interfaces";
 import { getMoviesByCategory, getSearchMovies } from "../api/apiService";
 import { MovieCategory } from "../types/enum";
 import MovieFilters from "../components/MovieFilters";
-import { useInfiniteScroll } from "../utils/infiniteScroll";
+import { useInfiniteScroll } from "../hooks/infiniteScroll";
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
