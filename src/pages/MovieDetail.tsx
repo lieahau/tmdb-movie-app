@@ -9,6 +9,7 @@ const MovieDetail = () => {
   const [movie, setMovie] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -29,16 +30,15 @@ const MovieDetail = () => {
 
   if (loading || error) {
     return (
-      <div className="text-gray-900 dark:text-gray-100">
-        <button className="mb-4 hover:underline" onClick={() => navigate(-1)}>
-          ← Back
-        </button>
-        
-        <StatusMessage
-          loading={loading}
-          error={error}
-          onRetry={() => window.location.reload()}
-        />
+      <div className="min-h-screen text-gray-900 dark:text-gray-100">
+        <button className="mb-4 hover:underline" onClick={() => navigate(-1)}>← Back</button>
+        <div className="flex items-center justify-center w-screen h-[calc(100vh-3rem)]">
+          <StatusMessage
+            loading={loading}
+            error={error}
+            onRetry={() => window.location.reload()}
+          />
+        </div>
       </div>
     );
   }
@@ -55,12 +55,18 @@ const MovieDetail = () => {
       </button>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Image */}
-        <div className="flex-shrink-0">
+        {/* Poster */}
+        <div className="flex-shrink-0 relative">
+          {!imgLoaded && (
+            <div className="w-full max-w-[350px] md:max-w-[300px] aspect-[2/3] bg-gray-200 animate-pulse rounded" />
+          )}
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
-            className="w-full max-w-[350px] md:max-w-[300px] rounded"
+            className={`w-full max-w-[350px] md:max-w-[300px] rounded ${
+              imgLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setImgLoaded(true)}
           />
         </div>
 
@@ -68,11 +74,9 @@ const MovieDetail = () => {
         <div className="flex-1">
           <h1 className="text-2xl font-bold mb-2">{movie.title}</h1>
           <p className="mb-2">{movie.overview}</p>
-
           <p className="mb-2">
             <strong>Director:</strong> {director?.name}
           </p>
-
           <p>
             <strong>Main Cast:</strong> {cast.map((c: any) => c.name).join(", ")}
           </p>
