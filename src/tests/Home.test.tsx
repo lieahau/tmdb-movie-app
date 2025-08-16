@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import { renderWithRouter } from "./test-utils";
 import { mockMovies } from "./mockdata";
 import { getMoviesByCategory, getSearchMovies } from "../api/apiService";
+import { MovieCategory } from "../types/enum";
 
 jest.mock("../api/apiService", () => ({
   getMoviesByCategory: jest.fn(),
@@ -28,26 +29,29 @@ describe("Home page", () => {
 
     await act(async () => fireEvent.click(popularButton));
 
-    expect(getMoviesByCategory).toHaveBeenCalledWith("popular", 1);
+    expect(getMoviesByCategory).toHaveBeenCalledWith(MovieCategory.Popular, 1);
   });
 
-  test("renders more movies on infinite scroll", async () => {
-    // Prepare next page mock
+  test("loads more movies when scrolling to bottom", async () => {
+    // Mock next page data
     const nextPageMovies = [
       { id: 3, title: "Movie C", release_date: "2023-03-01", poster_path: "/path3.jpg" },
     ];
     (getMoviesByCategory as jest.Mock).mockResolvedValueOnce(nextPageMovies);
 
-    // Scroll to bottom
+    // Simulate scroll to bottom
     await act(async () => {
-      window.innerHeight = 1000;
-      Object.defineProperty(document.body, "offsetHeight", { value: 1500 });
-      window.scrollY = 600;
+      Object.defineProperty(window, "innerHeight", { value: 1000, writable: true });
+      Object.defineProperty(document.body, "offsetHeight", { value: 1500, writable: true });
+      Object.defineProperty(window, "scrollY", { value: 600, writable: true });
 
       window.dispatchEvent(new Event("scroll"));
     });
 
-    // Check new movie is rendered
+    // Expect new movies to appear
     expect(await screen.findByText("Movie C")).toBeInTheDocument();
+
+    // Ensure API was called for page 2
+    expect(getMoviesByCategory).toHaveBeenCalledWith(MovieCategory.NowPlaying, 2);
   });
 });

@@ -4,6 +4,7 @@ import { Movie } from "../types/interfaces";
 import { getMoviesByCategory, getSearchMovies } from "../api/apiService";
 import { MovieCategory } from "../types/enum";
 import MovieFilters from "../components/MovieFilters";
+import { useInfiniteScroll } from "../utils/infiniteScroll";
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -39,26 +40,17 @@ const Home = () => {
     }
   };
 
+  const loadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchMovies(nextPage);
+  };
+  useInfiniteScroll({ loading, onLoadMore: loadMore });
+
   useEffect(() => {
     setPage(1);
     fetchMovies(1);
   }, [category]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const isBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
-
-      if (isBottom && !loading) {
-        const nextPage = page + 1;
-        setPage(nextPage);
-        fetchMovies(nextPage);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [page, loading, search, category]);
 
   return (
     <div>
