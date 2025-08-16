@@ -6,7 +6,7 @@ interface MovieFiltersProps {
   onSearchChange: (value: string) => void;
   onCategoryChange: (category: MovieCategory) => void;
   onSubmit: () => void;
-};
+}
 
 const categories = [
   { label: "Now Playing", value: MovieCategory.NowPlaying },
@@ -23,39 +23,41 @@ const MovieFilters = ({
   onSubmit,
 }: MovieFiltersProps) => {
   return (
-    <div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+      aria-label="search-form"
+      className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4"
+    >
+
       {/* Search bar */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-        }}
-        className="mb-4"
-        aria-label="search-form"
-      >
-        <input
-          className="border p-2 rounded w-full"
-          placeholder="Search movie..."
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-        />
-      </form>
+      <input
+        className="border p-2 rounded w-full md:flex-grow"
+        placeholder="Search movie..."
+        value={search}
+        onChange={(e) => onSearchChange(e.target.value)}
+      />
 
       {/* Category buttons */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 md:flex-nowrap md:shrink-0">
         {categories.map((c) => (
           <button
             key={c.value}
+            type="button"
             onClick={() => onCategoryChange(c.value)}
-            className={`px-3 py-1 rounded ${
-              category === c.value ? "bg-gray-800 text-white" : "bg-gray-200"
-            }`}
+            className={`
+              px-3 py-1 rounded
+              w-full md:w-auto
+              ${category === c.value ? "bg-gray-800 text-white" : "bg-gray-200"}
+            `}
           >
             {c.label}
           </button>
         ))}
       </div>
-    </div>
+    </form>
   );
 };
 
