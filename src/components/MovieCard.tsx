@@ -16,7 +16,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
         />
         <h2 className="text-lg font-semibold">{movie.title}</h2>
         <p className="text-sm text-gray-500">
-          {new Date(movie.release_date).getFullYear()}
+          {movie.release_date ? new Date(movie.release_date).getFullYear() : "TBA"}
         </p>
       </div>
     </Link>
