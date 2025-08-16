@@ -54,4 +54,26 @@ describe("Home page", () => {
     // Ensure API was called for page 2
     expect(getMoviesByCategory).toHaveBeenCalledWith(MovieCategory.NowPlaying, 2);
   });
+
+  test("shows error message when API fails", async () => {
+    (getMoviesByCategory as jest.Mock).mockRejectedValueOnce(new Error("fail"));
+
+    await renderWithRouter(<Home />);
+
+    expect(await screen.findByText("Failed to fetch movies. Please try again.")).toBeInTheDocument();
+  });
+
+  test("loads again when Retry button is clicked", async () => {
+    (getMoviesByCategory as jest.Mock)
+      .mockRejectedValueOnce(new Error("fail"))
+      .mockResolvedValueOnce(mockMovies);
+
+    await renderWithRouter(<Home />);
+
+    const retryBtn = await screen.findByText("Retry");
+
+    await act(async () => fireEvent.click(retryBtn));
+
+    expect(getMoviesByCategory).toHaveBeenCalledTimes(3);
+  });
 });
