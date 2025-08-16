@@ -31,6 +31,7 @@ const MovieFilters = ({
           onSubmit();
         }}
         className="mb-4"
+        aria-label="search-form"
       >
         <input
           className="border p-2 rounded w-full"
