@@ -5,13 +5,6 @@ import { getMoviesByCategory, getSearchMovies } from "../api/apiService";
 import { MovieCategory } from "../types/enum";
 import MovieFilters from "../components/MovieFilters";
 
-const categories = [
-  { label: "Now Playing", value: MovieCategory.NowPlaying },
-  { label: "Popular", value: MovieCategory.Popular },
-  { label: "Top Rated", value: MovieCategory.TopRated },
-  { label: "Upcoming", value: MovieCategory.Upcoming },
-];
-
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
@@ -66,12 +59,6 @@ const Home = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [page, loading, search, category]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPage(1);
-    fetchMovies(1);
-  };
 
   return (
     <div>
