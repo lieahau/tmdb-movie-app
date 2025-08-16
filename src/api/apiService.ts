@@ -17,3 +17,10 @@ export const getSearchMovies = async (query: string, page = 1): Promise<Movie[]>
   });
   return res.data.results;
 };
+
+export const getMovieDetail = async (id: string) => {
+  const res = await tmdb.get(`/movie/${id}`, {
+    params: { append_to_response: "credits" },
+  });
+  return res.data;
+};

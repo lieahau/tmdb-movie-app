@@ -1,21 +1,24 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { tmdb } from "../api/tmdb";
+import { getMovieDetail } from "../api/apiService";
+import { StatusMessage } from "../components/StatusMessage";
 
 const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [movie, setMovie] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         setLoading(true);
-        const res = await tmdb.get(`/movie/${id}`, {
-          params: { append_to_response: "credits" },
-        });
-        setMovie(res.data);
+        const data = await getMovieDetail(id!);
+        setMovie(data);
+        setError(null);
+      } catch (err) {
+        setError("Failed to fetch movie details.");
       } finally {
         setLoading(false);
       }
@@ -24,16 +27,30 @@ const MovieDetail = () => {
     fetchMovie();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading || error) {
+    return (
+      <div className="text-gray-900 dark:text-gray-100">
+        <button className="mb-4 hover:underline" onClick={() => navigate(-1)}>
+          ← Back
+        </button>
+        
+        <StatusMessage
+          loading={loading}
+          error={error}
+          onRetry={() => window.location.reload()}
+        />
+      </div>
+    );
+  }
+
   if (!movie) return null;
 
-  // Extract director & main cast
   const director = movie.credits.crew.find((c: any) => c.job === "Director");
   const cast = movie.credits.cast.slice(0, 5);
 
   return (
-    <div>
-      <button className="mb-4 underline" onClick={() => navigate(-1)}>
+    <div className="text-gray-900 dark:text-gray-100">
+      <button className="mb-4 hover:underline" onClick={() => navigate(-1)}>
         ← Back
       </button>
 
@@ -51,8 +68,7 @@ const MovieDetail = () => {
       </p>
 
       <p>
-        <strong>Main Cast:</strong>{" "}
-        {cast.map((c: any) => c.name).join(", ")}
+        <strong>Main Cast:</strong> {cast.map((c: any) => c.name).join(", ")}
       </p>
     </div>
   );
