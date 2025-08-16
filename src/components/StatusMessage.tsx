@@ -6,21 +6,29 @@ interface StatusMessageProps {
 };
 
 export const StatusMessage = ({ loading, error, onRetry, noData }: StatusMessageProps) => {
-  if (loading) return <p className="mt-4 text-center">Loading...</p>;
-  if (noData) return <p className="mt-4 text-center">No movies found.</p>;
-  if (error)
+  if (loading) {
+    return <p className="mt-4 text-center text-gray-800 dark:text-gray-100">Loading...</p>;
+  }
+
+  if (noData) {
+    return <p className="mt-4 text-center bg-gray-800 text-white rounded dark:bg-gray-600">No movies found.</p>;
+  }
+
+  if (error) {
     return (
       <div className="mt-4 text-center">
         <p>{error}</p>
         {onRetry && (
           <button
             onClick={onRetry}
-            className="mt-2 px-3 py-1 bg-gray-800 text-white rounded"
+            className="mt-2 px-3 py-1 bg-gray-800 text-white rounded dark:bg-gray-600"
           >
             Retry
           </button>
         )}
       </div>
     );
+  }
+
   return null;
 };

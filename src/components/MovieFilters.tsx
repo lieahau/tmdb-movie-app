@@ -34,7 +34,7 @@ const MovieFilters = ({
 
       {/* Search bar */}
       <input
-        className="border p-2 rounded w-full md:flex-grow"
+        className="border p-2 rounded w-full md:flex-grow bg-white dark:bg-gray-700 dark:text-gray-100"
         placeholder="Search movie..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
@@ -48,9 +48,10 @@ const MovieFilters = ({
             type="button"
             onClick={() => onCategoryChange(c.value)}
             className={`
-              px-3 py-1 rounded
-              w-full md:w-auto
-              ${category === c.value ? "bg-gray-800 text-white" : "bg-gray-200"}
+              px-3 py-1 rounded w-full md:w-auto
+              ${category === c.value
+                ? "bg-gray-800 text-white"
+                : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200"}
             `}
           >
             {c.label}
