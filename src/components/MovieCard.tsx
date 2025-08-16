@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Movie } from "../types/interfaces";
-import { getPosterUrl } from "../api/apiService";
 
 interface MovieCardProps {
   movie: Movie;
@@ -20,7 +19,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           )}
 
           <img
-            src={getPosterUrl(movie.poster_path)}
+            src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "/No-Image-Placeholder.png"}
             alt={movie.title}
             onLoad={() => setImgLoaded(true)}
             className={`object-cover w-full h-full transition-opacity ${
