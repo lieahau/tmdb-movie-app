@@ -4,6 +4,7 @@ import MovieGrid from "../components/MovieGrid";
 import { Movie } from "../types/interfaces";
 import { getMoviesByCategory, getSearchMovies } from "../api/apiService";
 import { MovieCategory } from "../types/enum";
+import MovieFilters from "../components/MovieFilters";
 
 const categories = [
   { label: "Now Playing", value: MovieCategory.NowPlaying },
@@ -29,8 +30,16 @@ const Home = () => {
       if (search) results = await getSearchMovies(search, newPage);
       else results = await getMoviesByCategory(category, newPage);
 
-      if (newPage === 1) setMovies(results);
-      else setMovies((prev) => [...prev, ...results]);
+      if (newPage === 1) {
+        setMovies(results);
+      } else {
+        setMovies((prev) => {
+          const newResults = results.filter(
+            (m) => !prev.some((movie) => movie.id === m.id)
+          );
+          return [...prev, ...newResults];
+        });
+      }
     } catch (err) {
       setError("Failed to fetch movies. Please try again.");
     } finally {
@@ -67,30 +76,17 @@ const Home = () => {
 
   return (
     <div>
-      {/* Search bar */}
-      <form onSubmit={handleSearch} className="mb-4">
-        <input
-          className="border p-2 rounded w-full"
-          placeholder="Search movie..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </form>
-
-      {/* Categories */}
-      <div className="flex gap-2 mb-4">
-        {categories.map((c) => (
-          <button
-            key={c.value}
-            onClick={() => setCategory(c.value)}
-            className={`px-3 py-1 rounded ${
-              category === c.value ? "bg-gray-800 text-white" : "bg-gray-200"
-            }`}
-          >
-            {c.label}
-          </button>
-        ))}
-      </div>
+      {/* Movie Search & Filter */}
+      <MovieFilters
+        search={search}
+        category={category}
+        onSearchChange={setSearch}
+        onCategoryChange={setCategory}
+        onSubmit={() => {
+          setPage(1);
+          fetchMovies(1);
+        }}
+      />
 
       {/* Movies */}
       <MovieGrid movies={movies} />
