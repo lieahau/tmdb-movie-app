@@ -1,20 +1,14 @@
-import { fireEvent, render, screen, act } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { fireEvent, screen, act } from "@testing-library/react";
 import Home from "../pages/Home";
 import { tmdb } from "../api/tmdb";
+import { renderWithRouter } from "./test-utils";
+import { mockMovies } from "./mockdata";
 
 jest.mock("../api/tmdb", () => ({
   tmdb: {
     get: jest.fn(),
   },
 }));
-
-const mockMovies = [
-  { id: 1, title: "Movie A", release_date: "2024-01-01", poster_path: "/imgA.jpg" },
-  { id: 2, title: "Movie B", release_date: "2024-01-01", poster_path: "/imgB.jpg" },
-];
-
-const renderWithRouter = async (ui: React.ReactElement) => await act(async () => render(<BrowserRouter>{ui}</BrowserRouter>));
 
 describe("Home page", () => {
   beforeEach(() => {
@@ -39,9 +33,7 @@ describe("Home page", () => {
 
     const popularButton = screen.getByText("Popular");
 
-    await act(async () => {
-      fireEvent.click(popularButton);
-    });
+    await act(async () => fireEvent.click(popularButton));
 
     expect(tmdb.get).toHaveBeenCalledWith("/movie/popular", { params: { page: 1 } });
   });
