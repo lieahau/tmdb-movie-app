@@ -17,7 +17,7 @@ export const StatusMessage = ({ loading, error, onRetry, noData }: StatusMessage
   if (error) {
     return (
       <div className="mt-4 text-center">
-        <p>{error}</p>
+        <p className="text-gray-800 dark:text-gray-100">{error}</p>
         {onRetry && (
           <button
             onClick={onRetry}
