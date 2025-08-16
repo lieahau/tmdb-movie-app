@@ -1,12 +1,13 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { renderWithRouter } from "./test-utils";
 import MovieCard from "../components/MovieCard";
 import { mockMovies } from "./mockdata";
 
 describe("MovieCard", () => {
   beforeEach(async () => {
-    jest.clearAllMocks();
     await renderWithRouter(<MovieCard movie={mockMovies[0]} />);
+    const imgs = screen.getAllByRole("img");
+    imgs.forEach((img) => fireEvent.load(img));
   });
 
   test("renders movie title, release year, and poster", () => {

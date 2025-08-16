@@ -16,6 +16,8 @@ describe("Home page", () => {
     (getMoviesByCategory as jest.Mock).mockResolvedValue(mockMovies);
     (getSearchMovies as jest.Mock).mockResolvedValue(mockMovies);
     await renderWithRouter(<Home />);
+    const imgs = screen.getAllByRole("img");
+    imgs.forEach((img) => fireEvent.load(img));
   });
 
   test("renders Home component and movie grid", async () => {

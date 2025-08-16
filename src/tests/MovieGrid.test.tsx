@@ -1,16 +1,20 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { mockMovies } from "./mockdata";
 import { renderWithRouter } from "./test-utils";
 import MovieGrid from "../components/MovieGrid";
 
 describe("MovieGrid", () => {
-  it("renders a list of movies", async () => {
+  beforeEach(async () => {
     await renderWithRouter(<MovieGrid movies={mockMovies} />);
-    
+    const imgs = screen.getAllByRole("img");
+    imgs.forEach((img) => fireEvent.load(img));
+  });
+
+  it("renders a list of movies", () => {
     expect(screen.getByText("Movie A")).toBeInTheDocument();
     expect(screen.getByText("Movie B")).toBeInTheDocument();
-    
-    const images = screen.getAllByRole("img");
-    expect(images.length).toBe(3);
+
+    const imgs = screen.getAllByRole("img");
+    expect(imgs.length).toBe(3);
   });
 });
