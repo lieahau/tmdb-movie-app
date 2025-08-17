@@ -4,11 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+  
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "vitebuild": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest"
+    "unittest": "jest"
   },
   "dependencies": {
     "axios": "^1.11.0",
